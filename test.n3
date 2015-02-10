@@ -1,0 +1,97 @@
+
+
+# highlight XML when type ends with XMLLiteral.
+"""<this attr='f&quot;oo'> is 
+some <xml/> yes. </this>"""
+   ^^ 
+  rdfs:XMLLiteral other:stuff <yes>.
+"<this attr='foo'> is some <xml/> yes. </this>" ^^ <somestuff#XMLLiteral> other:stuff <yes>.
+"""<this attr='foo'> is some <xml/> yes. </this>""" ^^ <#XMLLiteral> other:stuff <yes>.
+"""<this attr='foo'> is some <xml/> NO. </this>""" ^^ meh:XMLLiteralFoo other:stuff <yes>.
+"""<this attr='foo'> is some <xml/> NO. </this>""" ^^ something:else other:stuff <yes>.
+"""<this attr='foo'> is some <xml/> NO. </this>"""@en-us other:stuff <yes>.
+
+
+_:a1 _:a2
+
+# comment TODO: foo
+
+@base <invalid url>.
+@base <forgot-dot>
+@base :with-dot-but-not-url .
+@base <with-url+dot> . #valid
+
+@prefix foo: <no-dot>
+@prefix foo: <url> . #valid
+@prefix <no-prefix>.
+@prefix no-url: .
+@prefix
+linebreak:
+<valid>
+. #valid
+
+q:name#comment
+
+<http://url-without-space> #valid
+<http://url with space> #invalid
+
+@base<a>.@base<b>.
+@base <http://some/base/url>.#wha
+
+@prefix foo: <http://w3.org/%ffmeh#> . # comment
+@prefix : <what>. # comment
+
+foo:stuff ^^ @invalid-langtag :meh "a stri\nn\U00000001g" @en-us ,
+ """some other
+ multiline
+ 
+ string"""
+ 
+ ^^
+ 
+ foo:type .
+
+# no commas!
+@forAll <foo> k:x :meh.
+@forAll <foo> , "invalid", k:x ,:meh,:m.
+@forAll :x,
+:y.
+@forSome :what, :huh, <stuff>.
+
+@true <= @false .
+
+# NCNames invalid here!
+[] what wat.
+[ what wat ; wat ].
+
+# numbers
+12398 , 10.4 , 3/4 , -129.8e58 .
+
+# no toplevel vars
+( 12398 , 10.4 , 3/4 , -129.8e58 ) math:sum ?x.
+
+# only inside formulas!
+{ ?x <foo> ?y  } => { ?y = ?x }.
+
+{ ?nested <formula> { ?stuff ?x :a } . ?x ?y ?z } <= { :huh } .
+
+:alice @a <#human> ;
+  @has :foo :bar ^ :path ! :path^:path!:path ;
+  @is :foo @of :bob .
+
+:an @is :without :of.
+
+@this = "new".
+
+# NCName invalid here.
+
+forAll :a, :b.
+prefix :x <f>.
+
+@keywords prefix, forAll.
+
+# @-less Keywords allowed, and NCNames not in the list.
+
+forAll a, b.
+prefix :x <f>.
+
